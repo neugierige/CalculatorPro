@@ -12,11 +12,13 @@ class ViewController: UIViewController {
     
     
     @IBOutlet private weak var display: UILabel!
+    @IBOutlet private weak var formula: UILabel!
     
     internal var userTypingNumber = false
     
     override func viewWillAppear(_ animated: Bool) {
-        let displayTextRect = CGRect(x: display.frame.minX + 5, y: display.frame.minY, width: display.frame.width - 50, height: display.frame.height)
+        view.backgroundColor = UIColor.blue
+        let displayTextRect = CGRect(x: display.frame.minX + 100, y: display.frame.minY, width: display.frame.width - 50, height: display.frame.height)
         display.textRect(forBounds: displayTextRect, limitedToNumberOfLines: 1)
     }
     
