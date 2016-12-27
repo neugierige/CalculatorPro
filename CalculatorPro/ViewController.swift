@@ -34,6 +34,17 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
     }
     
+    private var displayValue: Double {
+        get {
+            return Double(display.text!)!
+        }
+        set {
+            display.text = String(newValue)
+        }
+    }
+    
+    private var model = CalculatorModel()
+    
     @IBAction private func touchDigit(_ sender: UIButton) {
         let number = sender.currentTitle!
         formula.text = formula.text! + number
@@ -52,17 +63,6 @@ class ViewController: UIViewController {
         }
     }
     
-    private var displayValue: Double {
-        get {
-            return Double(display.text!)!
-        }
-        set {
-            display.text = String(newValue)
-        }
-    }
-    
-    private var model = CalculatorModel()
-    
     @IBAction private func performOperand(_ sender: UIButton) {
         
         if userTypingNumber {
@@ -77,6 +77,11 @@ class ViewController: UIViewController {
         displayValue = model.result
     }
     
+    @IBAction func clearScreen(_ sender: Any) {
+        model.clear()
+        display.text = ""
+        formula.text = ""
+    }
     
     var savedProgram: CalculatorModel.PropertyList?
     func save() {

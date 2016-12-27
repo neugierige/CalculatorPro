@@ -35,7 +35,7 @@ class CalculatorModel {
         "sinh": Operation.UniaryOperation(sinh),
         "cosh": Operation.UniaryOperation(cosh),
         "tanh": Operation.UniaryOperation(tanh),
-        // "x!": Operation.UniaryOperation(),
+         "x!": Operation.Factorial,
     ]
     
 
@@ -46,9 +46,9 @@ class CalculatorModel {
     // in fact, optionals ARE enums
         case Constant(Double)
         case UniaryOperation((Double)->Double)
-        // case FailableUniaryOperation((Double)->AnyObject)
         case BinaryOperation((Double, Double)->Double)
         case Equals
+        case Factorial
     }
     
     
@@ -58,12 +58,17 @@ class CalculatorModel {
             switch interpretedOperation {
             case .Constant(let associatedValue): accumulator = associatedValue
             case .UniaryOperation(let function): accumulator = function(accumulator)
-            // case .FailableUniaryOperation(let function): result = function(accumulator)
             case .BinaryOperation(let function): pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
             case .Equals:
                 if pending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
+                }
+            case .Factorial:
+                if accumulator > 0 && floor(accumulator) == accumulator {
+                    accumulator = Double(factorial(n: Int(accumulator)))
+                } else if accumulator == 0 {
+                    accumulator = 1
                 }
             }
         }
@@ -79,6 +84,11 @@ class CalculatorModel {
 //        }
     }
     
+    func factorial(n: Int) -> Int {
+        return n == 0 ? 1 : n * factorial(n: n-1)
+    }
+    
+    
     private var pending: PendingBinary?
     
     private struct PendingBinary {
@@ -86,10 +96,8 @@ class CalculatorModel {
     // structs passed by value (like enums) -> it gets COPIED!
     // (Swift is smart, it doesn't ACTUALLY copy it until you try to touch it)
     // classes are passed by reference: passing a pointer to it, have the same one
-        
         var binaryFunction: (Double, Double) -> Double
         var firstNum: Double
-        
     }
     
     // documentation for reader that PropertyList is really just AnyObject
@@ -119,20 +127,6 @@ class CalculatorModel {
         internalProgram.removeAll()
     }
     
-    func factorial(num: Double) -> AnyObject {
-        if num < 0 || floor(num) != num {
-            return "Error" as AnyObject
-        } else if num == 0 {
-            return 1 as AnyObject
-        }
-        
-        var result = num
-        while result > 0 {
-            result *= result - 1
-            result -= 1
-        }
-        return result as AnyObject
-    }
     
     var result: Double {
         get {
