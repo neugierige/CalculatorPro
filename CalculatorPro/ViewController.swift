@@ -71,8 +71,15 @@ class ViewController: UIViewController {
         }
         
         if let symbol = sender.currentTitle {
-            formula.text = formula.text! + symbol
             model.performOperation(symbol: symbol)
+            
+            var symbolFormat = symbol
+            switch symbol {
+                case "±": symbolFormat = "-"
+                case "x!": symbolFormat = "!"
+                default: symbolFormat = symbol
+            }
+            formula.text = formula.text! + symbolFormat
         }
         displayValue = model.result
     }
