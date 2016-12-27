@@ -17,11 +17,22 @@ class ViewController: UIViewController {
     internal var userTypingNumber = false
     
     override func viewWillAppear(_ animated: Bool) {
-        view.backgroundColor = UIColor.blue
+        view.backgroundColor = UIColor.black
+        display.backgroundColor = UIColor.black
+        formula.backgroundColor = UIColor.black
+        
+        formula.adjustsFontSizeToFitWidth = true
+        display.adjustsFontSizeToFitWidth = true
+        
+        
+        // DOES NOT WORK
         let displayTextRect = CGRect(x: display.frame.minX + 100, y: display.frame.minY, width: display.frame.width - 50, height: display.frame.height)
         display.textRect(forBounds: displayTextRect, limitedToNumberOfLines: 1)
     }
     
+    
+    override func viewDidLoad() {
+    }
     
     @IBAction private func touchDigit(_ sender: UIButton) {
         let number = sender.currentTitle!
