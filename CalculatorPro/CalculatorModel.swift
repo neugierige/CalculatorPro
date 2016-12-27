@@ -96,10 +96,8 @@ class CalculatorModel {
     // structs passed by value (like enums) -> it gets COPIED!
     // (Swift is smart, it doesn't ACTUALLY copy it until you try to touch it)
     // classes are passed by reference: passing a pointer to it, have the same one
-        
         var binaryFunction: (Double, Double) -> Double
         var firstNum: Double
-        
     }
     
     // documentation for reader that PropertyList is really just AnyObject
