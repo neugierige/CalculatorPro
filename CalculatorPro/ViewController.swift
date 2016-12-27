@@ -36,6 +36,8 @@ class ViewController: UIViewController {
     
     @IBAction private func touchDigit(_ sender: UIButton) {
         let number = sender.currentTitle!
+        formula.text = formula.text! + number
+        
         if userTypingNumber {
             display.text = display.text! + number
         } else {
@@ -62,12 +64,14 @@ class ViewController: UIViewController {
     private var model = CalculatorModel()
     
     @IBAction private func performOperand(_ sender: UIButton) {
+        
         if userTypingNumber {
             model.setOperand(operand: displayValue)
             userTypingNumber = false
         }
         
         if let symbol = sender.currentTitle {
+            formula.text = formula.text! + symbol
             model.performOperation(symbol: symbol)
         }
         displayValue = model.result
