@@ -75,7 +75,7 @@ class ViewController: UIViewController {
             
             var symbolFormat = symbol
             switch symbol {
-                case "±": symbolFormat = "-"
+//                case "±": symbolFormat = "-"
                 case "x!": symbolFormat = "!"
                 default: symbolFormat = symbol
             }
