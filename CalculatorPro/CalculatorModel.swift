@@ -35,7 +35,10 @@ class CalculatorModel {
         "sinh": Operation.UniaryOperation(sinh),
         "cosh": Operation.UniaryOperation(cosh),
         "tanh": Operation.UniaryOperation(tanh),
-         "x!": Operation.Factorial,
+        "x²": Operation.UniaryOperation({$0*$0}),
+        "x3": Operation.UniaryOperation({$0*$0*$0}),
+        
+        "x!": Operation.Factorial,
     ]
     
 
