@@ -51,12 +51,14 @@ class ViewController: UIViewController {
     
     @IBAction private func touchDigit(_ sender: UIButton) {
         let number = sender.currentTitle!
-        formula.text = formula.text! + number
+        
         
         if userTypingNumber {
             display.text = display.text! + number
+            formula.text = formula.text! + number
         } else {
             display.text = number
+            formula.text = number
         }
         userTypingNumber = true
     }
@@ -79,11 +81,18 @@ class ViewController: UIViewController {
             
             var symbolFormat = symbol
             switch symbol {
-//                case "±": symbolFormat = "-"
-                case "x!": symbolFormat = "!"
-                default: symbolFormat = symbol
+                case "x!": symbolFormat = formula.text! + "!"
+                case "x²": symbolFormat = formula.text! + "²"
+                case "x^3": symbolFormat = formula.text! + "^3"
+                
+                // PREPEND
+                case "√": symbolFormat = "√" + formula.text!
+                case "±": symbolFormat = "-" + formula.text!
+                case "1/x": symbolFormat = "1/" + formula.text!
+                
+                default: symbolFormat = formula.text! + symbol
             }
-            formula.text = formula.text! + symbolFormat
+            formula.text = symbolFormat
         }
         displayValue = model.result
     }
