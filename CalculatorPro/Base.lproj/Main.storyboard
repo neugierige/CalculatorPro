@@ -72,7 +72,7 @@
                                                         <rect key="frame" x="0.0" y="53" width="83.5" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="x3"/>
+                                                        <state key="normal" title="x^3"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fq4-jn-IIX"/>
                                                         </connections>
@@ -128,7 +128,7 @@
                                                         <rect key="frame" x="0.0" y="106" width="83.5" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="sinh"/>
+                                                        <state key="normal" title="sin"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sw4-C9-sY0"/>
                                                         </connections>
@@ -137,7 +137,7 @@
                                                         <rect key="frame" x="0.0" y="159" width="83.5" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="cosh"/>
+                                                        <state key="normal" title="cos"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3M1-Rl-zDO"/>
                                                         </connections>
@@ -146,7 +146,7 @@
                                                         <rect key="frame" x="0.0" y="212" width="83.5" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="tanh"/>
+                                                        <state key="normal" title="tan"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QwG-J3-oGY"/>
                                                         </connections>
@@ -175,7 +175,7 @@
                                                         <rect key="frame" x="0.0" y="106" width="83" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="sin"/>
+                                                        <state key="normal" title="sinh"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p04-1N-7vi"/>
                                                         </connections>
@@ -184,7 +184,7 @@
                                                         <rect key="frame" x="0.0" y="159" width="83" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="cos"/>
+                                                        <state key="normal" title="cosh"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xlc-mU-V4s"/>
                                                         </connections>
@@ -193,7 +193,7 @@
                                                         <rect key="frame" x="0.0" y="212" width="83" height="53"/>
                                                         <color key="backgroundColor" red="0.95557399610000004" green="0.95557399610000004" blue="0.95557399610000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="tan"/>
+                                                        <state key="normal" title="tanh"/>
                                                         <connections>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WxD-hG-blv"/>
                                                         </connections>
