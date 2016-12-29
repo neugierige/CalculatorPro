@@ -496,6 +496,7 @@
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
+                                                            <action selector="evaluate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BqZ-eY-hic"/>
                                                             <action selector="performOperand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VfD-sE-fl5"/>
                                                         </connections>
                                                     </button>

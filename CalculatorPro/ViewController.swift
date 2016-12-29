@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet private weak var formula: UILabel!
     
     internal var userTypingNumber = false
+    internal var evaluated = false
     
     override func viewWillAppear(_ animated: Bool) {
         view.backgroundColor = UIColor.black
@@ -52,15 +53,19 @@ class ViewController: UIViewController {
     @IBAction private func touchDigit(_ sender: UIButton) {
         let number = sender.currentTitle!
         
-        
         if userTypingNumber {
             display.text = display.text! + number
-            formula.text = formula.text! + number
         } else {
             display.text = number
-            formula.text = number
         }
         userTypingNumber = true
+        
+        if evaluated {
+            formula.text = number
+            evaluated = false
+        } else {
+            formula.text = formula.text! + number
+        }
     }
 
     @IBAction private func touchDot(_ sender: UIButton) {
@@ -70,7 +75,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction private func performOperand(_ sender: UIButton) {
-        
         if userTypingNumber {
             model.setOperand(operand: displayValue)
             userTypingNumber = false
@@ -95,6 +99,11 @@ class ViewController: UIViewController {
             formula.text = symbolFormat
         }
         displayValue = model.result
+    }
+    
+    
+    @IBAction private func evaluate(_ sender: UIButton) {
+        evaluated = true
     }
     
     @IBAction func clearScreen(_ sender: Any) {
