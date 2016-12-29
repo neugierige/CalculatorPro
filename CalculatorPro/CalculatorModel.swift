@@ -36,8 +36,11 @@ class CalculatorModel {
         "cosh": Operation.UniaryOperation(cosh),
         "tanh": Operation.UniaryOperation(tanh),
         "x²": Operation.UniaryOperation({$0*$0}),
-        "x3": Operation.UniaryOperation({$0*$0*$0}),
-        
+        "x^3": Operation.UniaryOperation({pow($0, 3)}),
+        "x^y": Operation.BinaryOperation({pow($0, $1)}),
+        "10^x": Operation.UniaryOperation({pow(10.0, $0)}),
+        "1/x": Operation.UniaryOperation({1/$0}),
+        "e^x": Operation.UniaryOperation({pow(M_E, $0)}),
         "x!": Operation.Factorial,
     ]
     
@@ -75,6 +78,8 @@ class CalculatorModel {
                 }
             }
         }
+        
+        
         
 //        if let constant = operations[symbol] {
 //            accmulator = constant
