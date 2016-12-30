@@ -108,7 +108,7 @@ class ViewController: UIViewController {
     
     @IBAction func clearScreen(_ sender: Any) {
         model.clear()
-        display.text = ""
+        display.text = "0"
         formula.text = ""
     }
     
