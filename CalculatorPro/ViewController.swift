@@ -60,6 +60,7 @@ class ViewController: UIViewController {
         }
         userTypingNumber = true
         
+        
         if evaluated {
             formula.text = number
             evaluated = false
@@ -76,11 +77,18 @@ class ViewController: UIViewController {
     
     @IBAction private func performOperand(_ sender: UIButton) {
         if userTypingNumber {
+            print("user typing TRUE")
             model.setOperand(operand: displayValue)
             userTypingNumber = false
+        } else {
+            print("user typing FALSE")
         }
         
         if let symbol = sender.currentTitle {
+            if symbol != "=" {
+                evaluated = false
+            }
+            
             model.performOperation(symbol: symbol)
             
             var symbolFormat = symbol
@@ -110,6 +118,8 @@ class ViewController: UIViewController {
         model.clear()
         display.text = "0"
         formula.text = ""
+        userTypingNumber = false
+        evaluated = false
     }
     
     var savedProgram: CalculatorModel.PropertyList?
