@@ -92,6 +92,7 @@ class ViewController: UIViewController {
             model.performOperation(symbol: symbol)
             
             var symbolFormat = symbol
+            
             switch symbol {
                 case "x!": symbolFormat = formula.text! + "!"
                 case "x²": symbolFormat = formula.text! + "²"
@@ -116,10 +117,11 @@ class ViewController: UIViewController {
     
     @IBAction func clearScreen(_ sender: Any) {
         model.clear()
-        display.text = "0"
-        formula.text = ""
         userTypingNumber = false
         evaluated = false
+        display.text = "0"
+        formula.text = ""
+        
     }
     
     var savedProgram: CalculatorModel.PropertyList?
