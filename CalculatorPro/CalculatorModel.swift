@@ -79,8 +79,6 @@ class CalculatorModel {
             }
         }
         
-        
-        
 //        if let constant = operations[symbol] {
 //            accmulator = constant
 //        }
@@ -142,5 +140,11 @@ class CalculatorModel {
         }
     }
     
+    var description: String {
+        get {
+            print("result is \(result)")
+            return String(result)
+        }
+    }
     
 }
