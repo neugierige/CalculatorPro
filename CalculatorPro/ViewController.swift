@@ -65,6 +65,7 @@ class ViewController: UIViewController {
             formula.text = number
             evaluated = false
         } else {
+            print("array string is \(model.description)")
             formula.text = formula.text! + number
         }
     }
@@ -77,11 +78,11 @@ class ViewController: UIViewController {
     
     @IBAction private func performOperand(_ sender: UIButton) {
         if userTypingNumber {
-            print("user typing TRUE")
             model.setOperand(operand: displayValue)
             userTypingNumber = false
+            print("array string is \(model.description)")
         } else {
-            print("user typing FALSE")
+            print("user typing \(sender.currentTitle!) -> FALSE")
         }
         
         if let symbol = sender.currentTitle {

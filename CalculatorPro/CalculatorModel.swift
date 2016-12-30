@@ -12,6 +12,27 @@ class CalculatorModel {
     
     private var accumulator = 0.0
     private var internalProgram = [AnyObject]()
+    private var isPartialResult: Bool {
+        get {
+            return (pending != nil) ? true : false
+        }
+    }
+    
+    var result: Double {
+        get {
+            return accumulator
+        }
+    }
+    
+    var description: String {
+        get {
+            var stringifiedArray = ""
+            for thing in internalProgram {
+                stringifiedArray += String(describing: thing)
+            }
+            return stringifiedArray
+        }
+    }
     
     func setOperand(operand: Double) {
         accumulator = operand
@@ -133,18 +154,5 @@ class CalculatorModel {
         internalProgram.removeAll()
     }
     
-    
-    var result: Double {
-        get {
-            return accumulator
-        }
-    }
-    
-    var description: String {
-        get {
-            print("result is \(result)")
-            return String(result)
-        }
-    }
     
 }
