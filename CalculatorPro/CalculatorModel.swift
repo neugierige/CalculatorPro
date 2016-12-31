@@ -11,18 +11,18 @@ import Foundation
 class CalculatorModel {
     
     private var accumulator = 0.0
-    private var internalProgram = [AnyObject]()
+    private var internalProgram = [Any]()
     
     func setOperand(operand: Double) {
         accumulator = operand
-        internalProgram.append(operand as AnyObject)
+        internalProgram.append(operand)
     }
     
     private let operations: Dictionary<String, Operation> = [
-        "÷": Operation.BinaryOperation({$0 / $1}),
-        "✕": Operation.BinaryOperation({$0 * $1}),
-        "-": Operation.BinaryOperation({$0 - $1}),
-        "+": Operation.BinaryOperation({$0 + $1}),
+        "÷": Operation.HighOrderBinaryOperation({$0 / $1}),
+        "✕": Operation.HighOrderBinaryOperation({$0 * $1}),
+        "-": Operation.LowOrderBinaryOperation({$0 - $1}),
+        "+": Operation.LowOrderBinaryOperation({$0 + $1}),
         "=": Operation.Equals,
         "π": Operation.Constant(M_PI),
         "e": Operation.Constant(M_E),
@@ -37,7 +37,7 @@ class CalculatorModel {
         "tanh": Operation.UniaryOperation(tanh),
         "x²": Operation.UniaryOperation({$0*$0}),
         "x^3": Operation.UniaryOperation({pow($0, 3)}),
-        "x^y": Operation.BinaryOperation({pow($0, $1)}),
+        "x^y": Operation.HighOrderBinaryOperation({pow($0, $1)}),
         "10^x": Operation.UniaryOperation({pow(10.0, $0)}),
         "1/x": Operation.UniaryOperation({1/$0}),
         "e^x": Operation.UniaryOperation({pow(M_E, $0)}),
@@ -52,19 +52,41 @@ class CalculatorModel {
     // in fact, optionals ARE enums
         case Constant(Double)
         case UniaryOperation((Double)->Double)
-        case BinaryOperation((Double, Double)->Double)
+        case HighOrderBinaryOperation((Double, Double)->Double)
+        case LowOrderBinaryOperation((Double, Double)->Double)
         case Equals
         case Factorial
+        
+        var isHighOrder: Bool {
+            switch self {
+            case .LowOrderBinaryOperation(_):
+                return false
+            default:
+                return true
+            }
+        }
+    }
+    
+    private func shouldEvaluate(_ currentOp: Operation) -> Bool {
+        // check if last operator was a high order operation
+        // return true if last operator was high order or if `operation` is low order
+        
+        let lastOp = internalProgram.last as! Operation
+        // TODO: return true if there is no "lastOp"
+        
+        return lastOp.isHighOrder && !currentOp.isHighOrder
     }
     
     
     func performOperation(symbol: String) {
-        internalProgram.append(symbol as AnyObject)
         if let interpretedOperation = operations[symbol] {
+            internalProgram.append(interpretedOperation)
+            guard shouldEvaluate(interpretedOperation) else { return }
             switch interpretedOperation {
             case .Constant(let associatedValue): accumulator = associatedValue
             case .UniaryOperation(let function): accumulator = function(accumulator)
-            case .BinaryOperation(let function): pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
+            case .HighOrderBinaryOperation(let function), .LowOrderBinaryOperation(let function):
+                pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
             case .Equals:
                 if pending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
