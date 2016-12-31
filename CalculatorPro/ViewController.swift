@@ -122,17 +122,21 @@ class ViewController: UIViewController {
     }
     
     var savedProgram: CalculatorModel.PropertyList?
-    func save() {
+    @IBAction func save(_ sender: UIButton) {
         savedProgram = model.program
     }
     
-    func restore() {
+    @IBAction func restore(_ sender: UIButton) {
         if savedProgram != nil {
             model.program = savedProgram!
             displayValue = model.result
+            model.setOperand(operand: displayValue)
         }
     }
     
-
+    @IBAction func clearMemory(_ sender: UIButton) {
+        savedProgram = nil
+    }
+    
 }
 
