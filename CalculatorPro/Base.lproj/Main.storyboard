@@ -365,6 +365,9 @@
                                                                 <real key="value" value="0.5"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="clearMemory:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YBZ-Vp-y3f"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEw-TH-iRV">
                                                         <rect key="frame" x="0.0" y="159" width="83.5" height="53"/>
@@ -378,6 +381,9 @@
                                                                 <real key="value" value="0.5"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="save:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6ra-1L-9oj"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TtL-GS-EP1">
                                                         <rect key="frame" x="0.0" y="212" width="83.5" height="53"/>
@@ -391,6 +397,9 @@
                                                                 <real key="value" value="0.5"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="restore:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hV7-Qu-pH7"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
