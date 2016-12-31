@@ -84,11 +84,15 @@ class ViewController: UIViewController {
         }
         
         if let symbol = sender.currentTitle {
-            // TODO: if symbol is of type BinaryOperation, set evaluated to false
+            // if symbol is a binary operator, set evaluated to false
+            let binaryOperators = ["÷", "✕", "-", "+"]
+            if binaryOperators.contains(symbol) {
+                evaluated = false
+            }
+            
             model.performOperation(symbol: symbol)
             
             var symbolFormat = symbol
-            
             switch symbol {
                 case "x!": symbolFormat = formula.text! + "!"
                 case "x²": symbolFormat = formula.text! + "²"
