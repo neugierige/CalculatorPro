@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     
     private var displayValue: Double {
         get {
-            return Double(display.text!)!
+            return Double(display.text ?? "") ?? 0 //Double(display.text!)!
         }
         set {
             if floor(newValue) == newValue {
@@ -85,10 +85,7 @@ class ViewController: UIViewController {
         }
         
         if let symbol = sender.currentTitle {
-            if symbol != "=" {
-                evaluated = false
-            }
-            
+            // TODO: if symbol is of type BinaryOperation, set evaluated to false
             model.performOperation(symbol: symbol)
             
             var symbolFormat = symbol
