@@ -77,11 +77,10 @@ class ViewController: UIViewController {
     
     @IBAction private func performOperand(_ sender: UIButton) {
         if userTypingNumber {
-            print("user typing TRUE")
             model.setOperand(operand: displayValue)
             userTypingNumber = false
         } else {
-            print("user typing FALSE")
+            print("user typing \(sender.currentTitle!) -> FALSE")
         }
         
         if let symbol = sender.currentTitle {
