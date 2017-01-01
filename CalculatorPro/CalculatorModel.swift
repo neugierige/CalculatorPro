@@ -10,12 +10,50 @@ import Foundation
 
 class CalculatorModel {
     
+    var result: Double {
+        get {
+            return accumulator
+        }
+    }
+    
     private var accumulator = 0.0
     private var internalProgram = [Any]()
     
     func setOperand(operand: Double) {
         accumulator = operand
         internalProgram.append(operand)
+    }
+    
+    
+    private var pending: PendingBinary?
+    private struct PendingBinary {
+        // almost identical to classes
+        // structs passed by value (like enums) -> it gets COPIED!
+        // (Swift is smart, it doesn't ACTUALLY copy it until you try to touch it)
+        // classes are passed by reference: passing a pointer to it, have the same one
+        var binaryFunction: (Double, Double) -> Double
+        var firstNum: Double
+    }
+    
+    
+    typealias PropertyList = AnyObject // documentation for reader that PropertyList is really just AnyObject
+    var program: PropertyList {
+        get {
+            // arrays are value types, not reference types, so it gets COPIED
+            return internalProgram as CalculatorModel.PropertyList
+        }
+        set {
+            clear()
+            if let arrayOfOps = newValue as? [AnyObject] {
+                for op in arrayOfOps {
+                    if let operand = op as? Double {
+                        setOperand(operand: operand)
+                    } else if let operation = op as? String {
+                        performOperation(symbol: operation)
+                    }
+                }
+            }
+        }
     }
     
     private let operations: Dictionary<String, Operation> = [
@@ -45,7 +83,6 @@ class CalculatorModel {
     ]
     
 
-    
     private enum Operation {
     // enums can have functions!
     // all enums have associated values
@@ -83,9 +120,13 @@ class CalculatorModel {
             internalProgram.append(interpretedOperation)
             guard shouldEvaluate(interpretedOperation) else { return }
             switch interpretedOperation {
-            case .Constant(let associatedValue): accumulator = associatedValue
-            case .UniaryOperation(let function): accumulator = function(accumulator)
-            case .HighOrderBinaryOperation(let function), .LowOrderBinaryOperation(let function):
+            case .Constant(let associatedValue):
+                accumulator = associatedValue
+            case .UniaryOperation(let function):
+                accumulator = function(accumulator)
+            case .HighOrderBinaryOperation(let function):
+                pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
+            case .LowOrderBinaryOperation(let function):
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
             case .Equals:
                 if pending != nil {
@@ -100,8 +141,6 @@ class CalculatorModel {
                 }
             }
         }
-        
-        
         
 //        if let constant = operations[symbol] {
 //            accmulator = constant
@@ -119,49 +158,10 @@ class CalculatorModel {
     }
     
     
-    private var pending: PendingBinary?
-    
-    private struct PendingBinary {
-    // almost identical to classes
-    // structs passed by value (like enums) -> it gets COPIED!
-    // (Swift is smart, it doesn't ACTUALLY copy it until you try to touch it)
-    // classes are passed by reference: passing a pointer to it, have the same one
-        var binaryFunction: (Double, Double) -> Double
-        var firstNum: Double
-    }
-    
-    // documentation for reader that PropertyList is really just AnyObject
-    typealias PropertyList = AnyObject
-    var program: PropertyList {
-        get {
-            // arrays are value types, not reference types, so it gets COPIED
-            return internalProgram as CalculatorModel.PropertyList
-        }
-        set {
-            clear()
-            if let arrayOfOps = newValue as? [AnyObject] {
-                for op in arrayOfOps {
-                    if let operand = op as? Double {
-                        setOperand(operand: operand)
-                    } else if let operation = op as? String {
-                        performOperation(symbol: operation)
-                    }
-                }
-            }
-        }
-    }
-    
     func clear() {
         accumulator = 0.0
         pending = nil
         internalProgram.removeAll()
-    }
-    
-    
-    var result: Double {
-        get {
-            return accumulator
-        }
     }
     
     
