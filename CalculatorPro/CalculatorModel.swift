@@ -116,11 +116,11 @@ class CalculatorModel {
     
     
     func performOperation(symbol: String) {
-        if let operationInput = operations[symbol] {
-            internalProgram.append(operationInput)
+        if let inputSymbol = operations[symbol] {
+            internalProgram.append(inputSymbol)
             
             // guard shouldEvaluate(interpretedOperation) else { return }
-            var interpretedOperation = operationInput
+            var interpretedOperation = inputSymbol
             if internalProgram.count > 3 {
                 interpretedOperation = operations["="]!
             }
