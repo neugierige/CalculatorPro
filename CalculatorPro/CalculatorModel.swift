@@ -56,6 +56,27 @@ class CalculatorModel {
         }
     }
     
+    private enum Operation {
+        // enums can have functions!
+        // all enums have associated values
+        // in fact, optionals ARE enums
+        case Constant(Double)
+        case UniaryOperation((Double)->Double)
+        case HighOrderBinaryOperation((Double, Double)->Double)
+        case LowOrderBinaryOperation((Double, Double)->Double)
+        case Equals
+        case Factorial
+        
+        var isHighOrder: Bool {
+            switch self {
+            case .LowOrderBinaryOperation(_):
+                return false
+            default:
+                return true
+            }
+        }
+    }
+    
     private let operations: Dictionary<String, Operation> = [
         "÷": Operation.HighOrderBinaryOperation({$0 / $1}),
         "✕": Operation.HighOrderBinaryOperation({$0 * $1}),
@@ -82,27 +103,6 @@ class CalculatorModel {
         "x!": Operation.Factorial,
     ]
     
-
-    private enum Operation {
-    // enums can have functions!
-    // all enums have associated values
-    // in fact, optionals ARE enums
-        case Constant(Double)
-        case UniaryOperation((Double)->Double)
-        case HighOrderBinaryOperation((Double, Double)->Double)
-        case LowOrderBinaryOperation((Double, Double)->Double)
-        case Equals
-        case Factorial
-        
-        var isHighOrder: Bool {
-            switch self {
-            case .LowOrderBinaryOperation(_):
-                return false
-            default:
-                return true
-            }
-        }
-    }
     
 //    private func shouldEvaluate(_ currentOp: Operation) -> Bool {
 //        // check if last operator was a high order operation
