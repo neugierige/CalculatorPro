@@ -17,11 +17,11 @@ class CalculatorModel {
     }
     
     private var accumulator = 0.0
-    private var internalProgram = [Any]()
+    private var internalProgram = [AnyObject]()
     
     func setOperand(operand: Double) {
         accumulator = operand
-        internalProgram.append(operand)
+        internalProgram.append(operand as AnyObject)
     }
     
     
@@ -35,6 +35,13 @@ class CalculatorModel {
         var firstNum: Double
     }
     
+    private var pemdasPending: PendingTernary?
+    private struct PendingTernary {
+        var firstFunction: (Double, Double) -> Double
+        var secondFunction: (Double, Double) -> Double
+        var firstNum: Double
+        var secondNum: Double
+    }
     
     typealias PropertyList = AnyObject // documentation for reader that PropertyList is really just AnyObject
     var program: PropertyList {
@@ -117,13 +124,10 @@ class CalculatorModel {
     
     func performOperation(symbol: String) {
         if let inputSymbol = operations[symbol] {
-            internalProgram.append(inputSymbol)
+            internalProgram.append(inputSymbol as AnyObject)
             
             // guard shouldEvaluate(interpretedOperation) else { return }
-            var interpretedOperation = inputSymbol
-            if internalProgram.count > 3 {
-                interpretedOperation = operations["="]!
-            }
+            let interpretedOperation = inputSymbol
             
             switch interpretedOperation {
             case .Constant(let associatedValue):
@@ -131,14 +135,46 @@ class CalculatorModel {
             case .UniaryOperation(let function):
                 accumulator = function(accumulator)
             case .HighOrderBinaryOperation(let function):
+                if internalProgram.count >= 3 && pending != nil {
+                    print("pending 2: \(pending?.firstNum)")
+                    
+                    var lastOp = internalProgram[internalProgram.count-3] as? Operation
+                    print("checking lastOp: \(lastOp)")
+                    
+                    if (lastOp?.isHighOrder)!{
+                        print("last op was + or -")
+                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                    } else {
+                        print("last op was * or - or uniary")
+                        
+                        print("accumulator1: \(accumulator)")
+                        pemdasPending = PendingTernary(firstFunction: (pending?.binaryFunction)!, secondFunction: function, firstNum: (pending?.firstNum)!, secondNum: accumulator)
+                        
+                        // not right
+                        accumulator = pemdasPending!.secondFunction(pemdasPending!.secondNum, accumulator)
+                        print("accumulator2: \(accumulator)")
+                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                        print("accumulator3: \(accumulator)")
+                    }
+                    
+                }
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
+                print("pending 1: \(pending?.firstNum)")
+                
+
             case .LowOrderBinaryOperation(let function):
+                if internalProgram.count >= 3 && pending != nil {
+                    print("pending 2: \(pending?.firstNum)")
+                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                }
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
+                print("pending 1: \(pending?.firstNum)")
             case .Equals:
                 if pending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
                 }
+                print("internal program: \(internalProgram)")
             case .Factorial:
                 if accumulator > 0 && floor(accumulator) == accumulator {
                     accumulator = Double(factorial(n: Int(accumulator)))
