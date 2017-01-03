@@ -117,12 +117,12 @@ class CalculatorModel {
             case .HighOrderBinaryOperation(let function):
                 if pemdasPending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    print("accumulator2: \(accumulator)")
+                    print("pemdas operation1: \(accumulator)")
                     accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
-                    print("accumulator2: \(accumulator)")
+                    print("pemdas operation2: \(accumulator)")
                     pemdasPending = nil
+                    pending = nil
                 }
-                
                 if internalProgram.count >= 4 && pending != nil {
                     let lastOp = internalProgram[internalProgram.count-3] as? Operation
                     if (lastOp?.isHighOrder)! {
@@ -135,6 +135,14 @@ class CalculatorModel {
                 }
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
             case .LowOrderBinaryOperation(let function):
+                if pemdasPending != nil {
+                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                    print("pemdas operation1: \(accumulator)")
+                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
+                    print("pemdas operation2: \(accumulator)")
+                    pemdasPending = nil
+                    pending = nil
+                }
                 if internalProgram.count >= 4 && pending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
