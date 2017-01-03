@@ -100,8 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				B1CF774A1E00276900788376 /* Boilerplate */,
-				B1CF771B1DFF6A2E00788376 /* ViewController.swift */,
 				B1CF771D1DFF6A2E00788376 /* Main.storyboard */,
+				B1CF771B1DFF6A2E00788376 /* ViewController.swift */,
 				B1CF77471DFF949E00788376 /* CalculatorModel.swift */,
 			);
 			name = Calculator;
