@@ -24,8 +24,6 @@ class CalculatorModel {
         internalProgram.append(operand as AnyObject)
     }
     
-    
-    private var pending: PendingBinary?
     private struct PendingBinary {
         // almost identical to classes
         // structs passed by value (like enums) -> it gets COPIED!
@@ -35,13 +33,15 @@ class CalculatorModel {
         var firstNum: Double
     }
     
-    private var pemdasPending: PendingTernary?
-    private struct PendingTernary {
-        var firstFunction: (Double, Double) -> Double
-        var secondFunction: (Double, Double) -> Double
-        var firstNum: Double
-        var secondNum: Double
-    }
+    private var pending: PendingBinary?
+    private var pemdasPending: PendingBinary?
+    
+//    private struct PendingTernary {
+//        var firstFunction: (Double, Double) -> Double
+//        var secondFunction: (Double, Double) -> Double
+//        var firstNum: Double
+//        var secondNum: Double
+//    }
     
     typealias PropertyList = AnyObject // documentation for reader that PropertyList is really just AnyObject
     var program: PropertyList {
@@ -125,6 +125,7 @@ class CalculatorModel {
     func performOperation(symbol: String) {
         if let inputSymbol = operations[symbol] {
             internalProgram.append(inputSymbol as AnyObject)
+            print("internalProgram now: \(internalProgram)")
             
             // guard shouldEvaluate(interpretedOperation) else { return }
             let interpretedOperation = inputSymbol
@@ -135,42 +136,74 @@ class CalculatorModel {
             case .UniaryOperation(let function):
                 accumulator = function(accumulator)
             case .HighOrderBinaryOperation(let function):
-                if internalProgram.count >= 3 && pending != nil {
+                if internalProgram.count >= 4 && pending != nil {
                     print("pending 2: \(pending?.firstNum)")
                     
-                    var lastOp = internalProgram[internalProgram.count-3] as? Operation
-                    print("checking lastOp: \(lastOp)")
-                    
-                    if (lastOp?.isHighOrder)!{
-                        print("last op was + or -")
+                    let lastOp = internalProgram[internalProgram.count-3] as? Operation
+                    if (lastOp?.isHighOrder)! {
                         accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     } else {
-                        print("last op was * or - or uniary")
-                        
                         print("accumulator1: \(accumulator)")
-                        pemdasPending = PendingTernary(firstFunction: (pending?.binaryFunction)!, secondFunction: function, firstNum: (pending?.firstNum)!, secondNum: accumulator)
-                        
-                        // not right
-                        accumulator = pemdasPending!.secondFunction(pemdasPending!.secondNum, accumulator)
-                        print("accumulator2: \(accumulator)")
-                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                        print("accumulator3: \(accumulator)")
+                        pemdasPending = PendingBinary(binaryFunction: pending!.binaryFunction, firstNum: pending!.firstNum)
+                        pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
                     }
-                    
                 }
+                
+                if pemdasPending != nil {
+                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                    print("accumulator2: \(accumulator)")
+                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
+                    print("accumulator2: \(accumulator)")
+                    pemdasPending = nil
+                }
+                
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
                 print("pending 1: \(pending?.firstNum)")
                 
-
+                
+//                if internalProgram.count >= 4 && pending != nil {
+//                    print("pending 2: \(pending?.firstNum)")
+//                    
+//                    var lastOp = internalProgram[internalProgram.count-3] as? Operation
+//                    
+//                    if (lastOp?.isHighOrder)!{
+//                        print("last op was + or -")
+//                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+//                    } else {
+//                        print("last op was * or - or uniary")
+//                        
+//                        print("accumulator1: \(accumulator)")
+//                        pemdasPending = PendingTernary(firstFunction: (pending?.binaryFunction)!, secondFunction: function, firstNum: (pending?.firstNum)!, secondNum: accumulator)
+//                    }
+//                    
+//                }
+//                
+//                if internalProgram.count >= 6 && pending != nil {
+//                    accumulator = pemdasPending!.secondFunction(pemdasPending!.secondNum, accumulator)
+//                    print("accumulator2: \(accumulator)")
+//                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+//                    print("accumulator3: \(accumulator)")
+//                } else {
+//                    pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
+//                    print("pending 1: \(pending?.firstNum)")
+//                }
+                
             case .LowOrderBinaryOperation(let function):
-                if internalProgram.count >= 3 && pending != nil {
+                if internalProgram.count >= 4 && pending != nil {
                     print("pending 2: \(pending?.firstNum)")
+                    
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                    pending = nil
                 }
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
                 print("pending 1: \(pending?.firstNum)")
             case .Equals:
                 if pending != nil {
+                    if pemdasPending != nil {
+                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                        accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
+                        pemdasPending = nil
+                    }
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
                 }
