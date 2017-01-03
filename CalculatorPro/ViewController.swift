@@ -50,6 +50,13 @@ class ViewController: UIViewController {
     
     private var model = CalculatorModel()
     
+    private var offsetLength: Int {
+        get {
+            return display.text?.characters.count ?? 1
+        }
+        set { }
+    }
+    
     @IBAction private func touchDigit(_ sender: UIButton) {
         let number = sender.currentTitle!
         
@@ -92,8 +99,6 @@ class ViewController: UIViewController {
             
             model.performOperation(symbol: symbol)
             
-            // var symbolFormat = symbol
-            let offsetLength = display.text!.characters.count
             switch symbol {
                 case "x!": formula.text = formula.text! + "!"
                 case "x²": formula.text = formula.text! + "²"
@@ -102,18 +107,30 @@ class ViewController: UIViewController {
                 
                 // PREPEND
                 case "√": formula.text!.insert("√", at: formula.text!.index(formula.text!.endIndex, offsetBy: -1 * offsetLength))
-                    // symbolFormat = formula.text!
                 case "±": formula.text = "-" + formula.text!
                 case "1/x":
                     let range = formula.text!.index(formula.text!.endIndex, offsetBy: offsetLength * -1)..<formula.text!.endIndex
                     formula.text!.removeSubrange(range)
-                    formula.text = formula.text! + "1/" + display.text!
+                    formula.text = formula.text! + symbol + display.text!
+                case "sin": prependSymbol(symbol: "sin(", offsetLength: offsetLength)
+                case "cos": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
+                case "tan": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
+                case "sinh": prependSymbol(symbol: "sin(", offsetLength: offsetLength)
+                case "cosh": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
+                case "tanh": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
+                
                 
                 default: formula.text = formula.text! + symbol
             }
             // formula.text = symbolFormat
         }
         displayValue = model.result
+    }
+    
+    private func prependSymbol(symbol: String, offsetLength: Int) {
+        let range = formula.text!.index(formula.text!.endIndex, offsetBy: offsetLength * -1)..<formula.text!.endIndex
+        formula.text!.removeSubrange(range)
+        formula.text = formula.text! + symbol + display.text! + ")"
     }
     
     
