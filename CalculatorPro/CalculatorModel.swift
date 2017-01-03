@@ -136,6 +136,14 @@ class CalculatorModel {
             case .UniaryOperation(let function):
                 accumulator = function(accumulator)
             case .HighOrderBinaryOperation(let function):
+                if pemdasPending != nil {
+                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                    print("accumulator2: \(accumulator)")
+                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
+                    print("accumulator2: \(accumulator)")
+                    pemdasPending = nil
+                }
+                
                 if internalProgram.count >= 4 && pending != nil {
                     print("pending 2: \(pending?.firstNum)")
                     
@@ -149,44 +157,8 @@ class CalculatorModel {
                     }
                 }
                 
-                if pemdasPending != nil {
-                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    print("accumulator2: \(accumulator)")
-                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
-                    print("accumulator2: \(accumulator)")
-                    pemdasPending = nil
-                }
-                
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
                 print("pending 1: \(pending?.firstNum)")
-                
-                
-//                if internalProgram.count >= 4 && pending != nil {
-//                    print("pending 2: \(pending?.firstNum)")
-//                    
-//                    var lastOp = internalProgram[internalProgram.count-3] as? Operation
-//                    
-//                    if (lastOp?.isHighOrder)!{
-//                        print("last op was + or -")
-//                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-//                    } else {
-//                        print("last op was * or - or uniary")
-//                        
-//                        print("accumulator1: \(accumulator)")
-//                        pemdasPending = PendingTernary(firstFunction: (pending?.binaryFunction)!, secondFunction: function, firstNum: (pending?.firstNum)!, secondNum: accumulator)
-//                    }
-//                    
-//                }
-//                
-//                if internalProgram.count >= 6 && pending != nil {
-//                    accumulator = pemdasPending!.secondFunction(pemdasPending!.secondNum, accumulator)
-//                    print("accumulator2: \(accumulator)")
-//                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-//                    print("accumulator3: \(accumulator)")
-//                } else {
-//                    pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
-//                    print("pending 1: \(pending?.firstNum)")
-//                }
                 
             case .LowOrderBinaryOperation(let function):
                 if internalProgram.count >= 4 && pending != nil {
@@ -198,12 +170,14 @@ class CalculatorModel {
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
                 print("pending 1: \(pending?.firstNum)")
             case .Equals:
+                if pemdasPending != nil {
+                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
+                    pemdasPending = nil
+                    pending = nil
+                }
+                
                 if pending != nil {
-                    if pemdasPending != nil {
-                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                        accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
-                        pemdasPending = nil
-                    }
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
                 }
