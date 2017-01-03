@@ -105,24 +105,9 @@ class CalculatorModel {
     ]
     
     
-//    private func shouldEvaluate(_ currentOp: Operation) -> Bool {
-//        // check if last operator was a high order operation
-//        // return true if last operator was high order or if `operation` is low order
-//        
-//        let lastOp = internalProgram.last as! Operation
-//        // TODO: return true if there is no "lastOp"
-//        
-//        return lastOp.isHighOrder && !currentOp.isHighOrder
-//    }
-    
-    
     func performOperation(symbol: String) {
-        if let inputSymbol = operations[symbol] {
-            internalProgram.append(inputSymbol as AnyObject)
-            print("internalProgram now: \(internalProgram)")
-            
-            // guard shouldEvaluate(interpretedOperation) else { return }
-            let interpretedOperation = inputSymbol
+        if let interpretedOperation = operations[symbol] {
+            internalProgram.append(interpretedOperation as AnyObject)
             
             switch interpretedOperation {
             case .Constant(let associatedValue):
@@ -139,8 +124,6 @@ class CalculatorModel {
                 }
                 
                 if internalProgram.count >= 4 && pending != nil {
-                    print("pending 2: \(pending?.firstNum)")
-                    
                     let lastOp = internalProgram[internalProgram.count-3] as? Operation
                     if (lastOp?.isHighOrder)! {
                         accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
@@ -150,19 +133,13 @@ class CalculatorModel {
                         pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
                     }
                 }
-                
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
-                print("pending 1: \(pending?.firstNum)")
-                
             case .LowOrderBinaryOperation(let function):
                 if internalProgram.count >= 4 && pending != nil {
-                    print("pending 2: \(pending?.firstNum)")
-                    
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
                 }
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
-                print("pending 1: \(pending?.firstNum)")
             case .Equals:
                 if pemdasPending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
@@ -170,12 +147,10 @@ class CalculatorModel {
                     pemdasPending = nil
                     pending = nil
                 }
-                
                 if pending != nil {
                     accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
                     pending = nil
                 }
-                print("internal program: \(internalProgram)")
             case .Factorial:
                 if accumulator > 0 && floor(accumulator) == accumulator {
                     accumulator = Double(factorial(n: Int(accumulator)))
