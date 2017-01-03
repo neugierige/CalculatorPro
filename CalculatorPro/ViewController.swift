@@ -106,18 +106,24 @@ class ViewController: UIViewController {
                 case "x^y": formula.text = formula.text! + "^"
                 
                 // PREPEND
-                case "√": formula.text!.insert("√", at: formula.text!.index(formula.text!.endIndex, offsetBy: -1 * offsetLength))
-                case "±": formula.text = "-" + formula.text!
-                case "1/x":
-                    let range = formula.text!.index(formula.text!.endIndex, offsetBy: offsetLength * -1)..<formula.text!.endIndex
-                    formula.text!.removeSubrange(range)
-                    formula.text = formula.text! + symbol + display.text!
-                case "sin": prependSymbol(symbol: "sin(", offsetLength: offsetLength)
-                case "cos": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
-                case "tan": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
-                case "sinh": prependSymbol(symbol: "sin(", offsetLength: offsetLength)
-                case "cosh": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
-                case "tanh": prependSymbol(symbol: "cos(", offsetLength: offsetLength)
+                case "10^x": prependWithParens(symbol: "10^", closeParens: false)
+                case "e^x": prependWithParens(symbol: "e^", closeParens: false)
+                
+                case "√": prependWithParens(symbol: "√", closeParens: false)
+//                    formula.text!.insert("√", at: formula.text!.index(formula.text!.endIndex, offsetBy: -1 * offsetLength))
+                // case "±": formula.text = "-" + formula.text!
+                case "1/x": prependWithParens(symbol: "1/", closeParens: false)
+//                    let range = formula.text!.index(formula.text!.endIndex, offsetBy: offsetLength * -1)..<formula.text!.endIndex
+//                    formula.text!.removeSubrange(range)
+//                    formula.text = formula.text! + symbol + display.text!
+                
+                // TRIG OPs
+                case "sin": prependWithParens(symbol: "sin(", closeParens: true)
+                case "cos": prependWithParens(symbol: "cos(", closeParens: true)
+                case "tan": prependWithParens(symbol: "cos(", closeParens: true)
+                case "sinh": prependWithParens(symbol: "sin(", closeParens: true)
+                case "cosh": prependWithParens(symbol: "cos(", closeParens: true)
+                case "tanh": prependWithParens(symbol: "cos(", closeParens: true)
                 
                 
                 default: formula.text = formula.text! + symbol
@@ -127,10 +133,14 @@ class ViewController: UIViewController {
         displayValue = model.result
     }
     
-    private func prependSymbol(symbol: String, offsetLength: Int) {
+    private func prependWithParens(symbol: String, closeParens: Bool) {
         let range = formula.text!.index(formula.text!.endIndex, offsetBy: offsetLength * -1)..<formula.text!.endIndex
         formula.text!.removeSubrange(range)
-        formula.text = formula.text! + symbol + display.text! + ")"
+        formula.text = formula.text! + symbol + display.text!
+        if closeParens == true {
+            formula.text = formula.text! + ")"
+        }
+        
     }
     
     
