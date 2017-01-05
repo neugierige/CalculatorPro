@@ -36,13 +36,6 @@ class CalculatorModel {
     private var pending: PendingBinary?
     private var pemdasPending: PendingBinary?
     
-//    private struct PendingTernary {
-//        var firstFunction: (Double, Double) -> Double
-//        var secondFunction: (Double, Double) -> Double
-//        var firstNum: Double
-//        var secondNum: Double
-//    }
-    
     typealias PropertyList = AnyObject // documentation for reader that PropertyList is really just AnyObject
     var program: PropertyList {
         get {
