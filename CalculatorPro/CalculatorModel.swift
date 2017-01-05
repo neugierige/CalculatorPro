@@ -111,17 +111,6 @@ class CalculatorModel {
     ]
     
     
-//    private func shouldEvaluate(_ currentOp: Operation) -> Bool {
-//        // check if last operator was a high order operation
-//        // return true if last operator was high order or if `operation` is low order
-//        
-//        let lastOp = internalProgram.last as! Operation
-//        // TODO: return true if there is no "lastOp"
-//        
-//        return lastOp.isHighOrder && !currentOp.isHighOrder
-//    }
-    
-    
     func performOperation(symbol: String) {
         if let inputSymbol = operations[symbol] {
             internalProgram.append(inputSymbol as AnyObject)
