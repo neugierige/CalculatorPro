@@ -135,61 +135,33 @@ class CalculatorModel {
             case .UniaryOperation(let function):
                 accumulator = function(accumulator)
             case .HighOrderBinaryOperation(let function):
-                if pemdasPending != nil {
-                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    print("pemdas operation1: \(accumulator)")
-                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
-                    print("pemdas operation2: \(accumulator)")
-                    pemdasPending = nil
-                    pending = nil
-                }
-                
+                resolvePemdas()
                 if internalProgram.count >= 4 && pending != nil {
-                    print("pending 2: \(pending?.firstNum)")
-                    
-                    let lastOp = internalProgram[internalProgram.count-3] as? Operation
-                    if (lastOp?.isHighOrder)! {
-                        accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    } else {
-                        print("pemdas condition")
-                        pemdasPending = PendingBinary(binaryFunction: pending!.binaryFunction, firstNum: pending!.firstNum)
-                        pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
+                    if let lastOp = internalProgram[internalProgram.count-3] as? Operation {
+                        if lastOp.isHighOrder {
+                            accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+                            pending = nil
+                            print("lastOp is highorder: \(pending)")
+                        } else {
+                            print("pemdas condition")
+                            pemdasPending = PendingBinary(binaryFunction: pending!.binaryFunction, firstNum: pending!.firstNum)
+                            pending = nil
+                            print("pending gets updated: \(pending)")
+                        }
                     }
                 }
-                
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
-                print("pending 1: \(pending?.firstNum)")
-                
+                print("pending created: \(pending)")
             case .LowOrderBinaryOperation(let function):
-                if pemdasPending != nil {
-                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    print("pemdas operation1: \(accumulator)")
-                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
-                    print("pemdas operation2: \(accumulator)")
-                    pemdasPending = nil
-                    pending = nil
-                }
-                
-                if internalProgram.count >= 4 && pending != nil {
-                    print("pending 2: \(pending?.firstNum)")
-                    
-                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    pending = nil
+                resolvePemdas()
+                if internalProgram.count >= 4 {
+                    updateAccumulator()
                 }
                 pending = PendingBinary(binaryFunction: function, firstNum: accumulator)
-                print("pending 1: \(pending?.firstNum)")
+                print("low order pending binary: \(pending)")
             case .Equals:
-                if pemdasPending != nil {
-                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
-                    pemdasPending = nil
-                    pending = nil
-                }
-                
-                if pending != nil {
-                    accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
-                    pending = nil
-                }
+                resolvePemdas()
+                updateAccumulator()
             case .Factorial:
                 if accumulator > 0 && floor(accumulator) == accumulator {
                     accumulator = Double(factorial(n: Int(accumulator)))
@@ -208,6 +180,24 @@ class CalculatorModel {
 //        case "√": accumulator = sqrt(accumulator)
 //        default: break
 //        }
+    }
+    
+    func resolvePemdas() {
+        if pemdasPending != nil {
+            accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+            print("pemdas operation1: \(accumulator)")
+            accumulator = pemdasPending!.binaryFunction(pemdasPending!.firstNum, accumulator)
+            print("pemdas operation2: \(accumulator)")
+            pemdasPending = nil
+            pending = nil
+        }
+    }
+    
+    func updateAccumulator() {
+        if pending != nil {
+            accumulator = pending!.binaryFunction(pending!.firstNum, accumulator)
+            pending = nil
+        }
     }
     
     func factorial(n: Int) -> Int {
