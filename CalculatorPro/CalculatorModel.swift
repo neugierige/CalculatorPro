@@ -161,7 +161,7 @@ class CalculatorModel {
                 }
             case .Factorial:
                 if accumulator > 0 && floor(accumulator) == accumulator {
-                    accumulator = Double(factorial(n: Int(accumulator)))
+                    accumulator = factorial(n: accumulator)
                 } else if accumulator == 0 {
                     accumulator = 1
                 }
@@ -179,7 +179,7 @@ class CalculatorModel {
 //        }
     }
     
-    func factorial(n: Int) -> Int {
+    func factorial(n: Double) -> Double {
         return n == 0 ? 1 : n * factorial(n: n-1)
     }
     
